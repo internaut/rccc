@@ -1,0 +1,201 @@
+/* 
+    Document   : resistor
+    Created on : 18.10.2012, 20:51:27
+    Author     : markus
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: verdana, sans-serif;
+}
+
+header {
+    margin: 0;
+    background-color: #99ff99;
+}
+
+header h1 {
+    margin: 0;
+    padding: 0;
+}
+
+footer {
+    background-color: #ccffcc;
+    position: fixed;
+    bottom: 0%;
+    width: 100%;
+}
+
+#content {
+    width: 700px;
+    height: 400px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -200px;
+    margin-left: -350px;
+}
+
+.resWire {
+    background-color: black;
+    width: 75px;
+    height: 10px;
+    float: left;
+    position: relative;
+    top: 145px;
+}
+
+#resBody {
+    background-color: #e2c8af;
+    float: left;
+    width: 550px;
+    height: 300px;
+}
+
+.resWireLeft {
+    
+}
+
+.resWireRight {
+    
+}
+
+.resBand {
+    height: 300px;
+    width: 50px;
+/*    border: 1px solid #663300;
+    position: relative;
+    top: 0px; */
+    float: left;
+}
+
+#resBand1 {
+    background-color: chocolate;
+    margin-left: 70px;
+}
+
+#resBand2 {
+    background-color: black;
+    margin-left: 20px;
+}
+
+#resBand3 {
+    background-color: black;
+    margin-left: 90px;
+}
+
+#resBand4 {
+    background-color: goldenrod;
+    margin-left: 100px;
+}
+
+#console {
+    clear: both;
+    width: 550px;
+    margin-left: 75px;
+    height: 100px;
+}
+
+#explanation {
+    padding-top: 10px;
+    height: 50px;
+    font-size: 2.0em;
+}
+
+#resBand1Val {
+    float: left;
+    margin-left: 70px;
+    width: 50px;
+    text-align: center;
+}
+
+#resBand2Val {
+    float: left;
+    margin-left: 20px;
+    width: 50px;
+    text-align: center;
+}
+
+#resBand3ValPre {
+    float: left;
+    margin-left: 0px;
+    width: 90px;
+    text-align: center;
+}
+
+#resBand3Val {
+    float: left;
+    margin-left: 0px;
+    width: 50px;
+    text-align: left;
+    font-size: 0.8em;
+}
+
+#resBand4ValPre {
+    float: left;
+    margin-left: 0px;
+    width: 100px;
+    text-align: center;
+}
+
+#resBand4Val {
+    float: left;
+    margin-left: 0px;
+    text-align: center;
+}
+
+#consoleForm {
+    clear: both;
+    height: 50px;
+    font-size: 2.0em;
+}
+
+#consoleForm input {
+    font-size: 1.0em;
+}
+
+#resValue {
+    width: 258px;
+}
+
+#resTolerance {
+    font-size: 30px;
+}
+
+/*
+#resTolerance option {
+    font-size: 2.0em;
+}*/
+
+.preResult {
+    float: left;
+    width: 70px;
+    text-align: center;
+}
+
+#clrSelector {
+    background-color: none;
+    margin:5px;
+    display: none;
+    width: 40px;
+    height: 290px;
+}
+
+.clrSelectorField {
+    border: 1px solid darkgray;
+    border-collapse: collapse;
+/*    border-left: 1px solid darkgray;
+    border-right: 1px solid darkgray;*/
+    width: 38px;
+    height: 20px;
+    text-align: center;
+    padding-top: 0.1em;
+    font-size: 0.7em;
+}
