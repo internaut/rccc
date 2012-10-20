@@ -181,7 +181,6 @@ footer {
 }
 
 #clrSelector {
-    background-color: none;
     margin:5px;
     display: none;
     width: 40px;
@@ -198,4 +197,8 @@ footer {
     text-align: center;
     padding-top: 0.1em;
     font-size: 0.7em;
+}
+
+.clrSelectorSelected {
+    border: 1px solid red;
 }
