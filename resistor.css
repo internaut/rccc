@@ -69,7 +69,9 @@ footer {
 
 .resBand {
     height: 300px;
-    width: 50px;
+    width: 46px;
+    border-left: 2px solid #c0a68d;
+    border-right: 2px solid #c0a68d;
 /*    border: 1px solid #663300;
     position: relative;
     top: 0px; */
