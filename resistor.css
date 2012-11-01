@@ -183,9 +183,9 @@ footer {
 }
 
 #clrSelector {
-    margin:5px;
+    margin:2px;
     display: none;
-    width: 40px;
+    width: 41px;
     height: 290px;
 }
 
@@ -194,7 +194,7 @@ footer {
     border-collapse: collapse;
 /*    border-left: 1px solid darkgray;
     border-right: 1px solid darkgray;*/
-    width: 38px;
+    width: 39px;
     height: 20px;
     text-align: center;
     padding-top: 0.1em;

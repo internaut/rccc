@@ -16,6 +16,13 @@ var bandColors = new Array(
     'silver',
     'none');
 
+var unitPrefixes = new Array(
+    '',
+    'k',
+    'M',
+    'G'
+);
+
 function bandClicked(event) {
     var clickedBand = this.id.substr(this.id.length - 1, this.id.length);
     
@@ -84,7 +91,26 @@ function updateValues(band, val) {
     
     var resVal = (b[0] * 10.0 + b[1]) * Math.pow(10, b[2]);
     
-    $('#resValue').val(resVal);
+    updateUnitPrefix(resVal);
+}
+
+function updateUnitPrefix(val) {
+    var p = 0;
+    var x, finalVal;
+    while(true) {
+        x = Math.pow(1000, p);
+        finalVal = val / x;
+        
+        if (finalVal < 1000.0) {
+            break;
+        }
+        
+        p++;
+    }
+    
+    $('#unitPrefix').empty();
+    $('#unitPrefix').append(unitPrefixes[p]);
+    $('#resValue').val(finalVal);
 }
 
 $(document).ready(function(){
