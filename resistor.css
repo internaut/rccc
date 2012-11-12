@@ -57,14 +57,36 @@ footer {
     float: left;
     width: 550px;
     height: 300px;
+    
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    
+    -moz-box-shadow: 0 0 5px 5px #AAA;
+    -webkit-box-shadow: 0 0 5px 5px #AAA;
+    box-shadow: 0 0 5px 5px #AAA;
+    
+    background:-moz-linear-gradient(top, #fff, #e2c8af); /* Firefox */
+    background:-webkit-linear-gradient(top, #fff, #e2c8af); /* Safari, Chrome */
+    background:linear-gradient(top, #fff, #e2c8af); /* W3C Standard */
 }
 
 .resWireLeft {
-    
+    -webkit-border-top-left-radius: 5px;
+    -moz-border-top-left-radius: 5px;
+    border-top-left-radius: 5px;    
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-bottom-left-radius: 5px;
+    border-bottom-left-radius: 5px;    
 }
 
 .resWireRight {
-    
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-top-right-radius: 5px;
+    border-top-right-radius: 5px;    
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-bottom-right-radius: 5px;
+    border-bottom-right-radius: 5px;        
 }
 
 .resBand {
