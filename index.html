@@ -18,31 +18,29 @@
         <div id="res">
             <div class="resWire resWireLeft"></div>
             <div id="resBody">
+                <div id="resBand0" class="resBand"></div>
                 <div id="resBand1" class="resBand"></div>
                 <div id="resBand2" class="resBand"></div>
                 <div id="resBand3" class="resBand"></div>
                 <div id="resBand4" class="resBand"></div>
+                <div id="resBand5" class="resBand"></div>
             </div>
             <div class="resWire resWireRight"></div>
         </div>
         <div id="console">
             <div id="explanation">
+                <div id="resBand0Val">0</div>
                 <div id="resBand1Val">1</div>
                 <div id="resBand2Val">0</div>
-                <div id="resBand3ValPre">* 10</div>
+                <div id="resBand3ValPre">*10</div>
                 <div id="resBand3Val"><sup>0</sup></div>
                 <div id="resBand4ValPre">&plusmn;</div>
-                <div id="resBand4Val">20%</div>
+                <div id="resBand4ValContainer"><span id="resBand4Val">20</span><span class="resBandUnit">&percnt;</span></div>
+                <div id="resBand5ValContainer"><span id="resBand5Val">5</span><span class="resBandUnit">ppm/C&deg;</span></div>
             </div>
             <form id="consoleForm">
                 <div class="preResult">=</div>
                 <input name="resValue" id="resValue" type="number" value="1" min="1" max="99000000"> <span id="unitPrefix"></span>&ohm;
-                &plusmn;
-                <select name="resTolerance" id="resTolerance">
-                    <option selected>5%</option>
-                    <option>10%</option>
-                    <option>20%</option>
-                </select>
             </form>
         </div>
     </div>
@@ -52,7 +50,9 @@
         Download the source at <a href="http://github.com/project">github</a>.
     </footer>
     
-    <div id="clrSelector"></div>
+    <div id="clrSelector" class="clrSelectorArea"></div>
+    <div id="clrSelectorTol" class="clrSelectorArea"></div>
+    <div id="clrSelectorTemp" class="clrSelectorArea"></div>
     
     <script src="js/jquery-1.8.2.min.js"></script>
     <script src="js/resistor.js"></script>

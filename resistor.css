@@ -78,9 +78,14 @@ footer {
     float: left;
 }
 
+#resBand0 {
+    /*background-color: chocolate;*/
+    margin-left: 30px;
+}
+
 #resBand1 {
     background-color: chocolate;
-    margin-left: 70px;
+    margin-left: 20px;
 }
 
 #resBand2 {
@@ -90,17 +95,22 @@ footer {
 
 #resBand3 {
     background-color: black;
-    margin-left: 90px;
+    margin-left: 60px;
 }
 
 #resBand4 {
     background-color: goldenrod;
-    margin-left: 100px;
+    margin-left: 60px;
+}
+
+#resBand5 {
+    /*background-color: goldenrod;*/
+    margin-left: 30px;
 }
 
 #console {
     clear: both;
-    width: 550px;
+    width: 650px;
     margin-left: 75px;
     height: 100px;
 }
@@ -108,12 +118,20 @@ footer {
 #explanation {
     padding-top: 10px;
     height: 50px;
-    font-size: 2.0em;
+    font-size: 1.7em;
+}
+
+#resBand0Val {
+    float: left;
+    margin-left: 30px;
+    width: 50px;
+    text-align: center;
+    visibility: hidden;
 }
 
 #resBand1Val {
     float: left;
-    margin-left: 70px;
+    margin-left: 20px;
     width: 50px;
     text-align: center;
 }
@@ -128,13 +146,13 @@ footer {
 #resBand3ValPre {
     float: left;
     margin-left: 0px;
-    width: 90px;
+    width: 50px;
     text-align: center;
 }
 
 #resBand3Val {
     float: left;
-    margin-left: 0px;
+    margin-left: 15px;
     width: 50px;
     text-align: left;
     font-size: 0.8em;
@@ -143,14 +161,22 @@ footer {
 #resBand4ValPre {
     float: left;
     margin-left: 0px;
-    width: 100px;
+    width: 50px;
     text-align: center;
 }
 
-#resBand4Val {
+#resBand4ValContainer {
     float: left;
-    margin-left: 0px;
+    width: 70px;
+    margin-left: 5px;
     text-align: center;
+}
+
+#resBand5ValContainer {
+    float: left;
+    margin-left: 15px;
+    text-align: left;
+    visibility: hidden;
 }
 
 #consoleForm {
@@ -176,13 +202,17 @@ footer {
     font-size: 2.0em;
 }*/
 
+.resBandUnit {
+    font-size: 0.6em;
+}
+
 .preResult {
     float: left;
     width: 70px;
     text-align: center;
 }
 
-#clrSelector {
+.clrSelectorArea {
     margin:2px;
     display: none;
     width: 41px;
