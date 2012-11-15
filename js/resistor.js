@@ -41,7 +41,7 @@ var bandColorsTemp = new Array(
 
 var unitPrefixes = new Array(
     '',
-    'k',
+    'K',
     'M',
     'G'
 );
@@ -148,6 +148,7 @@ function clrFieldOver(event) {
 }
 
 function updateValues(band, val) {
+    // get the correct band value
     if (band < 4) {
         val--;
     } else {
@@ -178,14 +179,24 @@ function updateValues(band, val) {
     }
     
     // calculate new ohms
-    var b = new Array();
-    for (var i = 0; i < 4; i++) {
-        b[i] = parseFloat($('#resBand' + i + 'Val').text());
+    if (band < 5) {
+        var b = new Array();
+        for (var i = 0; i < 4; i++) {
+            b[i] = parseFloat($('#resBand' + i + 'Val').text());
+        }
+
+        var resVal = (b[0] * 100.0 + b[1] * 10.0 + b[2]) * Math.pow(10, b[3]);
+
+        var finalRes = updateUnitPrefix(resVal);
+
+        // calculate new min/max values
+        var t = parseFloat($('#resBand4Val').text()) / 100.0 * finalRes;
+        
+        $('#tolMinVal').empty();
+        $('#tolMinVal').append(finalRes - t);
+        $('#tolMaxVal').empty();
+        $('#tolMaxVal').append(finalRes + t);
     }
-    
-    var resVal = (b[0] * 100.0 + b[1] * 10.0 + b[2]) * Math.pow(10, b[3]);
-    
-    updateUnitPrefix(resVal);
 }
 
 function updateUnitPrefix(val) {
@@ -202,9 +213,11 @@ function updateUnitPrefix(val) {
         p++;
     }
     
-    $('#unitPrefix').empty();
-    $('#unitPrefix').append(unitPrefixes[p]);
+    $('.unitPrefix').empty();
+    $('.unitPrefix').append(unitPrefixes[p]);
     $('#resValue').val(finalVal);
+    
+    return finalVal;
 }
 
 $(document).ready(function(){

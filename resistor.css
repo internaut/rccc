@@ -212,17 +212,12 @@ footer {
 }
 
 #resValue {
-    width: 258px;
+    width: 208px;
 }
 
 #resTolerance {
     font-size: 30px;
 }
-
-/*
-#resTolerance option {
-    font-size: 2.0em;
-}*/
 
 .resBandUnit {
     font-size: 0.6em;
@@ -230,8 +225,13 @@ footer {
 
 .preResult {
     float: left;
-    width: 70px;
+    width: 40px;
     text-align: center;
+}
+
+
+#tolMinMax {
+    font-size: 0.5em;    
 }
 
 .clrSelectorArea {
