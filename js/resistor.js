@@ -1,3 +1,4 @@
+var activeESeries = 0;
 var activeBand = -1; // "-1" means "none"
 var activeBandId = '';
 
@@ -68,6 +69,42 @@ var tempValues = new Array(
     50,
     100
 );
+
+function eSeriesSelectionClicked(event) {
+    // get the series number from the id
+    var clickedSeries = this.id.substr(this.id.length - 1, this.id.length);
+    
+    changeESeries(clickedSeries);
+}
+
+function changeESeries(newSeries) {
+    // if nothing changed, do nothing
+    if (activeESeries == newSeries) return;
+    
+    $('#eseries_' + activeESeries).removeClass('active')
+    activeESeries = newSeries;
+    if (activeESeries != -1) {
+        $('#eseries_' + activeESeries).addClass('active');    
+    }
+}
+
+function updateESeriesSelection(selData) {
+    var closestSeries = selData[0];
+    var directMatch = selData[1];
+    var closestValueIdx = selData[2];
+    
+    var eSeriesInfo = $('#eSeriesInfo');
+    if (!directMatch) {
+        changeESeries(-1);
+        
+        eSeriesInfo.show('fast');
+        $('#eSeriesInfoName').empty().append(eSeriesLabels[closestSeries]);
+        $('#eSeriesClosestVal').empty().append(eSeriesValues[closestSeries][closestValueIdx]);
+    } else {
+        changeESeries(closestSeries);
+        eSeriesInfo.hide('fast');
+    }
+}
 
 function bandClicked(event) {
     // get the band number from the id
@@ -185,7 +222,9 @@ function updateValues(band, val) {
             b[i] = parseFloat($('#resBand' + i + 'Val').text());
         }
 
-        var resVal = (b[0] * 100.0 + b[1] * 10.0 + b[2]) * Math.pow(10, b[3]);
+        var n = b[0] * 100.0 + b[1] * 10.0 + b[2];
+        updateESeriesSelection(chooseESeriesForValue(n));
+        var resVal = n * Math.pow(10, b[3]);
 
         var finalRes = updateUnitPrefix(resVal);
 
@@ -197,6 +236,49 @@ function updateValues(band, val) {
         $('#tolMaxVal').empty();
         $('#tolMaxVal').append(finalRes + t);
     }
+}
+
+/**
+ * Choose best matching E-Series for a Ohm value n
+ * @param n - Ohm value
+ * @return Array with:
+ *  - E-Series number
+ *  - direct match true/false
+ *  - index of the closest value if direct match is false
+ */
+function chooseESeriesForValue(n) {
+    // set defaults
+    var minSeries = -1;
+    var minSeriesVal = Number.MAX_VALUE;
+    var closestValueIdx = -1;
+    var directMatch = false;
+    
+    // find best matching E-Series
+    for (var s = 0; s < eSeriesValues.length; s++) {
+        var sVals = eSeriesValues[s];
+        
+        for (var i = 0; i < sVals.length; i++) {
+            var d = Math.abs(sVals[i] - n);
+            
+            if (d == 0) {   // direct match found - stop.
+                minSeries = s;
+                minSeriesVal = n;
+                directMatch = true;
+                
+                break;
+            }
+            
+            if (d < minSeriesVal) { // lower distance found
+                minSeriesVal = d;
+                minSeries = s;
+                closestValueIdx = i;
+            }
+        }
+        
+        if (directMatch) break;
+    }
+    
+    return new Array(minSeries, directMatch, closestValueIdx);
 }
 
 function updateUnitPrefix(val) {
@@ -269,6 +351,16 @@ $(document).ready(function(){
     $('#clrSelector > div:first').append('<em>none</em>');
     $('#clrSelectorTol > div:first').append('<em>none</em>');
     $('#clrSelectorTemp > div:first').append('<em>none</em>');
+    
+    // create the E-Series menu
+    var eSeriesMenu = $('#eSeriesMenu');
+    for (i = 0; i < eSeriesLabels.length; ++i) {
+        eSeriesMenu.append('<li>' + eSeriesLabels[i] + '</li>');
+        var curElem = $('#eSeriesMenu > li:last');
+        curElem.attr({id: 'eseries_' + i});
+        curElem.click(eSeriesSelectionClicked);
+        if (i == activeESeries) curElem.addClass('active');
+    }
     
     // define events
     $('.resBand').click(bandClicked)
