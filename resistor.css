@@ -101,12 +101,12 @@ footer {
 }
 
 #resBand0 {
-    /*background-color: chocolate;*/
+    /*background-color: saddlebrown;*/
     margin-left: 30px;
 }
 
 #resBand1 {
-    background-color: chocolate;
+    background-color: saddlebrown;
     margin-left: 20px;
 }
 
@@ -177,7 +177,8 @@ footer {
     margin-left: 15px;
     width: 50px;
     text-align: left;
-    font-size: 0.8em;
+    font-size: 0.6em;
+    vertical-align: text-top;
 }
 
 #resBand4ValPre {

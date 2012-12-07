@@ -1,12 +1,15 @@
 var activeESeries = 0;
-var activeBand = -1; // "-1" means "none"
+var activeBand = -1;    // "-1" means "none"
 var activeBandId = '';
+var curResVal = 10;     // current resistance value
+var curResValPow10 = 0;
+var curBandVals = 10;
 
 // colors for normal bands
 var bandColors = new Array(
     'none',
     'black',
-    'brown',
+    'saddlebrown',
     'red',
     'orange',
     'yellow',
@@ -23,7 +26,7 @@ var bandColorsTol = new Array(
     'violet',
     'blue',
     'green',
-    'brown',
+    'saddlebrown',
     'red',
     'gold',
     'silver'
@@ -31,7 +34,7 @@ var bandColorsTol = new Array(
 
 var bandColorsTemp = new Array(
     'none',
-    'brown',
+    'saddlebrown',
     'red',
     'yellow',
     'orange',
@@ -70,14 +73,68 @@ var tempValues = new Array(
     100
 );
 
+function setNewResistance(r, eSeriesCompliant, preferredBandValLength) {
+    eSeriesCompliant = typeof eSeriesCompliant !== 'undefined' ? eSeriesCompliant : false;
+    preferredBandValLength = typeof preferredBandValLength !== 'undefined' ? preferredBandValLength : 3;
+    
+    console.log("r: " + r);
+    
+    var p = 0;
+    var x, f;
+    var powMax = Math.pow(10, preferredBandValLength);
+    while(true) {
+        x = Math.pow(10, p);
+        f = r / x;
+        
+        if (f < powMax) {
+            break;
+        }
+        
+        p++;
+    }
+    console.log("p: " + p);
+    console.log("f: " + f);
+    curResVal = r;
+    curBandVals = f;
+    curResValPow10 = p;
+    var bandsStr = curBandVals.toString();
+    
+    if (bandsStr.length == 2) {
+        bandsStr = '0' + bandsStr;
+    }
+    
+    for (var band = 0; band < 3; band++) {
+        var bandVal = parseInt(bandsStr.charAt(band));
+        var bandColor = bandColors[bandVal + 1];
+        
+        if (band == 0 && bandVal == 0) bandColor = 'none';
+        console.log("Updating band#" + band + " to " + bandVal + " / " + bandColor);
+        setBandColor(band, bandColor);
+        updateBandValue(band, bandVal, false);
+    }
+    
+    console.log("pow10: " + curResValPow10);
+    updateBandValue(3, curResValPow10, false);
+    setBandColor(3, bandColors[curResValPow10 + 1]);
+    
+    if (eSeriesCompliant) $('#eSeriesInfo').hide('fast');
+    
+    updateResistanceValue(r);
+}
+
 function eSeriesSelectionClicked(event) {
     // get the series number from the id
     var clickedSeries = this.id.substr(this.id.length - 1, this.id.length);
     
-    changeESeries(clickedSeries);
+    changeESeriesDisplay(clickedSeries);
+    var newBandVals = chooseValueForESeries(clickedSeries, curBandVals);
+    if (newBandVals != curBandVals) {
+        console.log("curResValPow10: " + curResValPow10);
+        setNewResistance(newBandVals * Math.pow(10, curResValPow10), true, newBandVals.toString().length);
+    }
 }
 
-function changeESeries(newSeries) {
+function changeESeriesDisplay(newSeries) {
     // if nothing changed, do nothing
     if (activeESeries == newSeries) return;
     
@@ -88,20 +145,20 @@ function changeESeries(newSeries) {
     }
 }
 
-function updateESeriesSelection(selData) {
+function updateESeriesSelectionForNewOhmValue(selData) {
     var closestSeries = selData[0];
     var directMatch = selData[1];
     var closestValueIdx = selData[2];
     
     var eSeriesInfo = $('#eSeriesInfo');
     if (!directMatch) {
-        changeESeries(-1);
+        changeESeriesDisplay(-1);
         
         eSeriesInfo.show('fast');
         $('#eSeriesInfoName').empty().append(eSeriesLabels[closestSeries]);
         $('#eSeriesClosestVal').empty().append(eSeriesValues[closestSeries][closestValueIdx]);
     } else {
-        changeESeries(closestSeries);
+        changeESeriesDisplay(closestSeries);
         eSeriesInfo.hide('fast');
     }
 }
@@ -162,38 +219,37 @@ function closeClrSelector() {
     }
 }
 
+function setBandColor(band, color) {
+    $('#resBand' + band).css({background:color})
+}
+
 function clrFieldOver(event) {
     $(this).addClass('clrSelectorSelected');
     
-    $('#resBand' + activeBand).css({backgroundColor: $(this).css('backgroundColor')
-        })
+    setBandColor(activeBand, $(this).css('backgroundColor'));
     
-    updateValues(activeBand, $(this).index());
+    updateBandValue(activeBand, $(this).index());
 }
 
 function clrFieldOut(event) {
     $(this).removeClass('clrSelectorSelected');
 }
 
-function clrFieldOver(event) {
-    $(this).addClass('clrSelectorSelected');
+function updateBandValue(band, val, calcRes) {
+    // set default value for "calcRes" parameter
+    calcRes = typeof calcRes !== 'undefined' ? calcRes : true;
     
-    $('#resBand' + activeBand).css({backgroundColor: $(this).css('backgroundColor')
-        })
-    
-    updateValues(activeBand, $(this).index());
-}
-
-function updateValues(band, val) {
     // get the correct band value
-    if (band < 4) {
-        val--;
-    } else {
-        var valArray;
-        if (band == 4) valArray = tolValues;
-        else valArray = tempValues;
-        
-        val = valArray[val];
+    if (calcRes) {
+        if (band < 4) {
+            val--;
+        } else {
+            var valArray;
+            if (band == 4) valArray = tolValues;
+            else valArray = tempValues;
+
+            val = valArray[val];
+        }
     }
     
     // set the band's value
@@ -216,27 +272,20 @@ function updateValues(band, val) {
     }
     
     // calculate new ohms
-    if (band < 5) {
+    if (band < 5 && calcRes) {
         var b = new Array();
         for (var i = 0; i < 4; i++) {
             b[i] = parseFloat($('#resBand' + i + 'Val').text());
         }
 
-        var n = b[0] * 100.0 + b[1] * 10.0 + b[2];
-        updateESeriesSelection(chooseESeriesForValue(n));
-        var resVal = n * Math.pow(10, b[3]);
-
-        var finalRes = updateUnitPrefix(resVal);
-
-        // calculate new min/max values
-        var t = parseFloat($('#resBand4Val').text()) / 100.0 * finalRes;
-        
-        $('#tolMinVal').empty();
-        $('#tolMinVal').append(finalRes - t);
-        $('#tolMaxVal').empty();
-        $('#tolMaxVal').append(finalRes + t);
+        curBandVals = b[0] * 100.0 + b[1] * 10.0 + b[2];
+        updateESeriesSelectionForNewOhmValue(chooseESeriesForValue(curBandVals));
+        curResVal = curBandVals * Math.pow(10, b[3]);
+        updateResistanceValue(curResVal);
     }
 }
+
+
 
 /**
  * Choose best matching E-Series for a Ohm value n
@@ -281,7 +330,27 @@ function chooseESeriesForValue(n) {
     return new Array(minSeries, directMatch, closestValueIdx);
 }
 
-function updateUnitPrefix(val) {
+function chooseValueForESeries(s, oldVal) {
+    // set defaults
+    var minValDiff = Number.MAX_VALUE;
+    var val = -1;
+    
+    // find best matching value
+    var sVals = eSeriesValues[s];
+    for (var i = 0; i < sVals.length; i++) {
+        var d = Math.abs(sVals[i] - oldVal);
+
+        if (d < minValDiff) { // lower distance found
+            val = sVals[i];
+            minValDiff = d;
+        }
+    }
+ 
+    return val;
+}
+
+function updateResistanceValue(val) {
+    // see if we can switch to giga or kilo
     var p = 0;
     var x, finalVal;
     while(true) {
@@ -295,11 +364,23 @@ function updateUnitPrefix(val) {
         p++;
     }
     
+    // set the 10er potentiation
+    curResValPow10 = $('#resBand3Val').text();
+    
+    // set the unit prefix
     $('.unitPrefix').empty();
     $('.unitPrefix').append(unitPrefixes[p]);
+    
+    // set the value
     $('#resValue').val(finalVal);
     
-    return finalVal;
+    // calculate new ohm min/max values
+    var t = parseFloat($('#resBand4Val').text()) / 100.0 * finalVal;
+    var min = Math.round((finalVal - t) * 100) / 100;
+    var max = Math.round((finalVal + t) * 100) / 100;
+    
+    $('#tolMinVal').empty().append(min);
+    $('#tolMaxVal').empty().append(max);
 }
 
 $(document).ready(function(){
