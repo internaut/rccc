@@ -281,6 +281,10 @@ footer {
     text-decoration: underline;
 }
 
+#eSeriesClosestValButton:hover {
+    cursor: pointer;
+}
+
 #resValue {
     width: 208px;
 }

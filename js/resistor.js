@@ -126,10 +126,13 @@ function eSeriesSelectionClicked(event) {
     // get the series number from the id
     var clickedSeries = this.id.substr(this.id.length - 1, this.id.length);
     
-    changeESeriesDisplay(clickedSeries);
-    var newBandVals = chooseValueForESeries(clickedSeries, curBandVals);
+    changeESeriesSelection(clickedSeries);
+}
+
+function changeESeriesSelection(newSeries) {
+    changeESeriesDisplay(newSeries);
+    var newBandVals = chooseValueForESeries(newSeries, curBandVals);
     if (newBandVals != curBandVals) {
-        console.log("curResValPow10: " + curResValPow10);
         setNewResistance(newBandVals * Math.pow(10, curResValPow10), true, newBandVals.toString().length);
     }
 }
@@ -146,7 +149,7 @@ function changeESeriesDisplay(newSeries) {
 }
 
 function updateESeriesSelectionForNewOhmValue(selData) {
-    var closestSeries = selData[0];
+    closestSeries = selData[0];
     var directMatch = selData[1];
     var closestValueIdx = selData[2];
     
@@ -161,6 +164,10 @@ function updateESeriesSelectionForNewOhmValue(selData) {
         changeESeriesDisplay(closestSeries);
         eSeriesInfo.hide('fast');
     }
+}
+
+function eSeriesInfoClicked(event) {
+    changeESeriesSelection(closestSeries);
 }
 
 function bandClicked(event) {
@@ -444,5 +451,6 @@ $(document).ready(function(){
     }
     
     // define events
-    $('.resBand').click(bandClicked)
+    $('.resBand').click(bandClicked);
+    $('#eSeriesClosestValButton').click(eSeriesInfoClicked);
  });
