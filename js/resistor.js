@@ -84,7 +84,7 @@ function setNewResistance(r, eSeriesCompliant, preferredBandValLength) {
     eSeriesCompliant = typeof eSeriesCompliant !== 'undefined' ? eSeriesCompliant : false;
     preferredBandValLength = typeof preferredBandValLength !== 'undefined' ? preferredBandValLength : 3;
     
-    console.log("r: " + r);
+//    console.log("r: " + r);
     
     var p = 0;
     var x, f;
@@ -99,8 +99,8 @@ function setNewResistance(r, eSeriesCompliant, preferredBandValLength) {
         
         p++;
     }
-    console.log("p: " + p);
-    console.log("f: " + f);
+//    console.log("p: " + p);
+//    console.log("f: " + f);
     curResVal = r;
     curBandVals = f;
     curResValPow10 = p;
@@ -120,8 +120,9 @@ function setNewResistance(r, eSeriesCompliant, preferredBandValLength) {
         updateBandValue(band, bandVal, false);
     }
     
-    console.log("pow10: " + curResValPow10);
-    updateBandValue(3, curResValPow10, false);
+//    console.log("pow10: " + curResValPow10);
+    updateBandValue(3, curResValPow10, false, true);
+    curResValPow10 = parseFloat(curResValPow10); // fixes a bug
     setBandColor(3, bandColors[curResValPow10 + 1]);
     
     if (eSeriesCompliant) $('#eSeriesInfo').hide('fast');
@@ -237,12 +238,15 @@ function parseResValueInput(t) {
     // strip whitespace
     t = t.replace(/\s/g, '');
     
+    // replace comma by dot
+    t = t.replace(',', '.');
+    
     // transform to uppercase
     t = t.toUpperCase();
     
     console.log("value is now " + t);
     // check if we have an incorrect string
-    if (!t.match(/^\d+(K|M|G)?$/g)) {
+    if (!t.match(/^\d+(\.\d+?)?(K|M|G)?$/g)) {
         console.log("incorrect!");
         
         $('#resValue').addClass('error');
@@ -268,6 +272,12 @@ function parseResValueInput(t) {
     // create the final result 'v'
     var v = parseFloat(t) * multiply;
     
+    // values below 100 cannot be fractions
+    if (v < 100) {
+        v = Math.round(v);
+    }
+    
+    // set the final value
     setNewResistance(v);
 }
 
@@ -280,7 +290,7 @@ function closeClrSelector() {
 }
 
 function setBandColor(band, color) {
-    $('#resBand' + band).css({background:color})
+    $('#resBand' + band).css({background:color});
 }
 
 function clrFieldOver(event) {
@@ -295,9 +305,10 @@ function clrFieldOut(event) {
     $(this).removeClass('clrSelectorSelected');
 }
 
-function updateBandValue(band, val, calcRes) {
+function updateBandValue(band, val, calcRes, updESeries) {
     // set default value for "calcRes" parameter
     calcRes = typeof calcRes !== 'undefined' ? calcRes : true;
+    updESeries = typeof updESeries !== 'undefined' ? updESeries : false;
     
     // get the correct band value
     if (calcRes) {
@@ -332,15 +343,22 @@ function updateBandValue(band, val, calcRes) {
     }
     
     // calculate new ohms
-    if (band < 5 && calcRes) {
-        var b = new Array();
-        for (var i = 0; i < 4; i++) {
-            b[i] = parseFloat($('#resBand' + i + 'Val').text());
-        }
+    if (band < 5 && (calcRes || updESeries)) {
+        var p = curResValPow10;
+        
+        if (calcRes) {
+            var b = new Array();
+            for (var i = 0; i < 4; i++) {
+                b[i] = parseFloat($('#resBand' + i + 'Val').text());
+            }
 
-        curBandVals = b[0] * 100.0 + b[1] * 10.0 + b[2];
+            curBandVals = b[0] * 100.0 + b[1] * 10.0 + b[2];
+            p = b[3];
+        }
+        
+        console.log("Updating E-Series selection... " + curBandVals);
         updateESeriesSelectionForNewOhmValue(chooseESeriesForValue(curBandVals));
-        curResVal = curBandVals * Math.pow(10, b[3]);
+        curResVal = curBandVals * Math.pow(10, p);
         updateResistanceValue(curResVal);
     }
 }
@@ -427,12 +445,8 @@ function updateResistanceValue(val) {
     // set the 10er potentiation
     curResValPow10 = $('#resBand3Val').text();
     
-    // set the unit prefix
-    $('.unitPrefix').empty();
-    $('.unitPrefix').append(unitPrefixes[p]);
-    
     // set the value
-    $('#resValue').val(finalVal);
+    $('#resValue').val(finalVal + unitPrefixes[p]);
     
     // calculate new ohm min/max values
     var t = parseFloat($('#resBand4Val').text()) / 100.0 * finalVal;
