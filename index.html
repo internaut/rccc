@@ -38,7 +38,7 @@
                 <div id="resBand4ValContainer"><span id="resBand4Val">20</span><span class="resBandUnit">&percnt;</span></div>
                 <div id="resBand5ValContainer"><span id="resBand5Val">5</span><span class="resBandUnit">ppm/C&deg;</span></div>
             </div>
-            <form id="consoleForm">
+            <form id="consoleForm" onsubmit="return false" method="get" novalidate>
                 <div class="eSeriesSelection">E-Series: <ul id="eSeriesMenu"></ul></div>
                 <div id="eSeriesInfo">
                     This is no E-Series compliant standard resistor for this value.<br />
@@ -46,7 +46,7 @@
                 </div>
                 <div class="clear"></div>
                 <div class="preResult">=</div>
-                <input name="resValue" id="resValue" type="number" value="1" min="1" max="99000000"> <span class="unitPrefix"></span>&ohm;
+                <input name="resValue" id="resValue" type="text" value="1" autofocus> <span class="unitPrefix"></span>&ohm;
                 <span id="tolMinMax">min/max: <span id="tolMinVal"></span> / <span id="tolMaxVal"></span> <span class="unitPrefix"></span>&ohm;</span>
             </form>
         </div>

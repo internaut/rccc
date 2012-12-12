@@ -50,6 +50,13 @@ var unitPrefixes = new Array(
     'G'
 );
 
+var unitPrefixesValues = new Array(
+    1,
+    1000,
+    1000000,
+    1000000000
+);
+
 var tolValues = new Array(
     20,
     0.05,
@@ -216,6 +223,52 @@ function bandClicked(event) {
     } else {
         closeClrSelector();
     }
+}
+
+function resValueInputChanged(event) {
+    //console.log("res value changed to: " + $(this).val());
+    
+    parseResValueInput($(this).val());
+}
+
+function parseResValueInput(t) {
+    console.log("parsing value " + t);
+    
+    // strip whitespace
+    t = t.replace(/\s/g, '');
+    
+    // transform to uppercase
+    t = t.toUpperCase();
+    
+    console.log("value is now " + t);
+    // check if we have an incorrect string
+    if (!t.match(/^\d+(K|M|G)?$/g)) {
+        console.log("incorrect!");
+        
+        $('#resValue').addClass('error');
+        
+        return;
+    }
+    
+    $('#resValue').removeClass('error');
+    
+    // the string is correct, get the right potentiation
+    var lastChar = t.substr(t.length - 1, t.length);
+    var multiply = 1;
+    console.log("lastChar is " + lastChar);
+    if (lastChar.match(/(K|M|G)/g)) {
+        for (var i = 1; i < unitPrefixes.length; i++) {
+            if (lastChar == unitPrefixes[i]) {
+                multiply = unitPrefixesValues[i];
+                break;
+            }
+        }
+    }
+    
+    // create the final result 'v'
+    var v = parseFloat(t) * multiply;
+    
+    setNewResistance(v);
 }
 
 function closeClrSelector() {
@@ -453,4 +506,12 @@ $(document).ready(function(){
     // define events
     $('.resBand').click(bandClicked);
     $('#eSeriesClosestValButton').click(eSeriesInfoClicked);
+    $('#resValue').change(resValueInputChanged);
+    $('#resValue').keyup(function () {});
+    
+    // handle GET parameter
+    var getParam = window.location.search.replace("?resValue=", "");
+    if (getParam !== undefined && getParam.length > 0) {
+        parseResValueInput(getParam);
+    }
  });
