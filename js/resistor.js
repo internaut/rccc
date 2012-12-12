@@ -93,14 +93,14 @@ function setNewResistance(r, eSeriesCompliant, preferredBandValLength) {
         x = Math.pow(10, p);
         f = r / x;
         
-        if (f < powMax) {
+        if (f < powMax && f / 10 != Math.round(f / 10)) {
             break;
         }
         
         p++;
     }
-//    console.log("p: " + p);
-//    console.log("f: " + f);
+    console.log("p: " + p);
+    console.log("f: " + f);
     curResVal = r;
     curBandVals = f;
     curResValPow10 = p;
