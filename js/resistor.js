@@ -4,6 +4,7 @@ var activeBandId = '';
 var curResVal = 10;     // current resistance value
 var curResValPow10 = 0;
 var curBandVals = 10;
+var defResValue = 10;   // default resistor value
 
 // colors for normal bands
 var bandColors = new Array(
@@ -526,7 +527,9 @@ $(document).ready(function(){
     
     // handle GET parameter & set default
     var getParam = window.location.search.replace("?resValue=", "");
-    if (getParam !== undefined && getParam.length > 0) {
-        parseResValueInput(getParam);
+    if (getParam === undefined || getParam.length < 2) {
+        getParam = defResValue.toString();
     }
+    
+    parseResValueInput(getParam);
  });
