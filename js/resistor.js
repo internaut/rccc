@@ -113,9 +113,19 @@ function setNewResistance(r, eSeriesCompliant) {
         p--;
     }
     
-    if (preferredBandValLength == 3 && f.toString().length < 3) {
+    if (preferredBandValLength == 2 && p > 9) {
         f *= 10;
+        chooseESeriesForValue(f);
         p--;
+    }
+    
+    if (preferredBandValLength == 3 && f.toString().length < 3) {
+        if (p > 0) {
+            f *= 10;
+            p--;
+        } else {
+            chooseESeriesForValue(f);
+        }
     }
     
     console.log("p: " + p);
