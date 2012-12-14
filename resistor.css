@@ -16,9 +16,26 @@ body {
     font-family: verdana, sans-serif;
 }
 
+a {
+    color: inherit;
+}
+
 header {
+    position: fixed;
+    left: 50%;
+    width: 510px;
+    margin-left: -255px;
+    margin-top: 50px;
+}
+
+header h1 {
     margin: 0;
-    background-color: #99ff99;
+    margin-left: 12px;
+    font-size: 1.5em;
+    text-shadow: 1px 1px 1px #000;
+    margin-bottom: 20px;
+    color: #e2c8af;
+    text-align: center;
 }
 
 header h1 {
@@ -27,10 +44,14 @@ header h1 {
 }
 
 footer {
-    background-color: #ccffcc;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 1px #000;
+    background-color: #e2c8af;
     position: fixed;
     bottom: 0%;
     width: 100%;
+    padding: 2px 4px 2px 4px;
 }
 
 #content {
@@ -213,7 +234,7 @@ footer {
 }
 
 .eSeriesSelection {
-    margin-left: 10px;
+    margin-left: 12px;
     font-size: 0.6em;
     margin-bottom: 20px;
     background-color: #e2c8af;
