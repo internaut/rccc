@@ -81,11 +81,10 @@ var tempValues = new Array(
     100
 );
 
-function setNewResistance(r, eSeriesCompliant, preferredBandValLength) {
+function setNewResistance(r, eSeriesCompliant) {
     eSeriesCompliant = typeof eSeriesCompliant !== 'undefined' ? eSeriesCompliant : false;
-    preferredBandValLength = typeof preferredBandValLength !== 'undefined' ? preferredBandValLength : 2;
     
-//    console.log("r: " + r);
+    var preferredBandValLength = activeESeries > 2 ? 3 : 2;
     
     var p = 0;
     var x, f;
@@ -95,26 +94,28 @@ function setNewResistance(r, eSeriesCompliant, preferredBandValLength) {
         x = Math.pow(10, p);
         f = r / x;
         
-        if ((f < fMax && f % fMax != 0) || f <= fMin) {
+        if ((f < fMax && f % 10 != 0) || f <= fMin) {
             break;
         }
         
         p++;
     }
 
-    console.log("f % fMax: " + (f % fMax));
+    console.log("f % 10: " + (f % 10));
     console.log("preferredBandValLength: " + preferredBandValLength);
+    console.log("p: " + p);
+    console.log("f: " + f);
     
-    if (f % fMax != 0 && p > 0) {
+    if (f * 10 % 10 != 0 && p > 0) {
         console.log("mod");
         
-        if (preferredBandValLength == 3 && p > 0) {
-            f /= 10;
-            p--;
-        } else if (preferredBandValLength == 2) {
-            f *= 10;
-            p--;
-        }
+        f *= 10;
+        p--;
+    }
+    
+    if (preferredBandValLength == 3 && f.toString().length < 3) {
+        f *= 10;
+        p--;
     }
     
     console.log("p: " + p);
@@ -334,16 +335,14 @@ function updateBandValue(band, val, calcRes, updESeries) {
     updESeries = typeof updESeries !== 'undefined' ? updESeries : false;
     
     // get the correct band value
-    if (calcRes) {
-        if (band < 4) {
-            val--;
-        } else {
-            var valArray;
-            if (band == 4) valArray = tolValues;
-            else valArray = tempValues;
+    if (band < 4 && calcRes) {
+        val--;
+    } else if (band >= 4) {
+        var valArray;
+        if (band == 4) valArray = tolValues;
+        else valArray = tempValues;
 
-            val = valArray[val];
-        }
+        val = valArray[val];
     }
     
     // set the band's value
@@ -553,4 +552,8 @@ $(document).ready(function(){
     }
     
     parseResValueInput(getParam);
+    updateBandValue(4, 0, false, false);
+    setBandColor(4, bandColorsTol[0]);
+    updateBandValue(5, 0, false, false);
+    setBandColor(5, bandColorsTemp[0]);
  });
