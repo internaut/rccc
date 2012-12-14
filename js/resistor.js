@@ -88,12 +88,13 @@ function setNewResistance(r, eSeriesCompliant, preferredBandValLength) {
     
     var p = 0;
     var x, f;
-    var powMax = Math.pow(10, preferredBandValLength);
+    var fMax = Math.pow(10, preferredBandValLength);
+    var fMin = 10;
     while(true) {
         x = Math.pow(10, p);
         f = r / x;
         
-        if (f < powMax && f / 10 != Math.round(f / 10)) {
+        if ((f < fMax && f / 10 != Math.round(f / 10)) || f <= fMin) {
             break;
         }
         
@@ -523,7 +524,7 @@ $(document).ready(function(){
     $('#resValue').change(resValueInputChanged);
     $('#resValue').keyup(function () {});
     
-    // handle GET parameter
+    // handle GET parameter & set default
     var getParam = window.location.search.replace("?resValue=", "");
     if (getParam !== undefined && getParam.length > 0) {
         parseResValueInput(getParam);
