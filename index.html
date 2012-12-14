@@ -7,6 +7,7 @@
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     
+    <link rel="shortcut icon" href="favicon.ico" />
     <link rel="stylesheet" href="resistor.css">
 </head>
 <body>
@@ -45,9 +46,14 @@
                     The closest standard value is <span id="eSeriesClosestValButton"><span id="eSeriesClosestVal"></span> in <span id="eSeriesInfoName"></span>-Series</span>.
                 </div>
                 <div class="clear"></div>
-                <div class="preResult">=</div>
-                <input name="resValue" id="resValue" type="text" value="1" autofocus> &ohm;
-                <span id="tolMinMax">min/max: <span id="tolMinVal"></span> / <span id="tolMaxVal"></span> <span class="unitPrefix"></span>&ohm;</span>
+                <div id="resultContainer">
+                    <div class="preResult">=</div>
+                    <input name="resValue" id="resValue" type="text" value="1" autofocus> &ohm;
+                </div>
+                <div id="tolMinMax">
+                    resistor tolerance<br />
+                    min / max: <span id="tolMinVal"></span> / <span id="tolMaxVal"></span> <span class="unitPrefix"></span>&ohm;
+                </div>
             </form>
         </div>
     </div>

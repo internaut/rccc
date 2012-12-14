@@ -328,9 +328,16 @@ footer {
     text-align: center;
 }
 
+#resultContainer {
+    float: left;
+}
 
 #tolMinMax {
-    font-size: 0.5em;    
+    float: left;
+    margin-left: 10px;
+    vertical-align: top;
+    padding-top: 2px;
+    font-size: 0.5em; 
 }
 
 .clrSelectorArea {

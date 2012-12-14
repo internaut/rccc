@@ -83,7 +83,7 @@ var tempValues = new Array(
 
 function setNewResistance(r, eSeriesCompliant, preferredBandValLength) {
     eSeriesCompliant = typeof eSeriesCompliant !== 'undefined' ? eSeriesCompliant : false;
-    preferredBandValLength = typeof preferredBandValLength !== 'undefined' ? preferredBandValLength : 3;
+    preferredBandValLength = typeof preferredBandValLength !== 'undefined' ? preferredBandValLength : 2;
     
 //    console.log("r: " + r);
     
@@ -95,12 +95,28 @@ function setNewResistance(r, eSeriesCompliant, preferredBandValLength) {
         x = Math.pow(10, p);
         f = r / x;
         
-        if ((f < fMax && f / 10 != Math.round(f / 10)) || f <= fMin) {
+        if ((f < fMax && f % fMax != 0) || f <= fMin) {
             break;
         }
         
         p++;
     }
+
+    console.log("f % fMax: " + (f % fMax));
+    console.log("preferredBandValLength: " + preferredBandValLength);
+    
+    if (f % fMax != 0 && p > 0) {
+        console.log("mod");
+        
+        if (preferredBandValLength == 3 && p > 0) {
+            f /= 10;
+            p--;
+        } else if (preferredBandValLength == 2) {
+            f *= 10;
+            p--;
+        }
+    }
+    
     console.log("p: " + p);
     console.log("f: " + f);
     curResVal = r;
@@ -277,6 +293,11 @@ function parseResValueInput(t) {
     // values below 100 cannot be fractions
     if (v < 100) {
         v = Math.round(v);
+    }
+    
+    // min value is 10
+    if (v < 10) {
+        v = 10;
     }
     
     // set the final value
